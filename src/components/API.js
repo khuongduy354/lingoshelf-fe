@@ -76,7 +76,39 @@ const UserAPI = {
   login: () => {},
 };
 
+const EbooksAPI = {
+  uploadBooks: async (accessToken, payload) => {
+    const url = process.env.REACT_APP_BE_URL + "/book";
+    const res = await fetch(url, {
+      headers: {
+        Authorization: accessToken,
+      },
+      method: "POST",
+      body: payload,
+    });
+    return res.ok;
+  },
+  getMyBooks: async (accessToken) => {
+    const url = process.env.REACT_APP_BE_URL + "/me/books";
+    const res = await fetch(url, { headers: { Authorization: accessToken } });
+    if (res.ok) {
+      const data = await res.json();
+      return data.books;
+    }
+    return null;
+  },
+  deleteBook: async (accessToken, bookId) => {
+    const url = process.env.REACT_APP_BE_URL + "/books" + bookId;
+    const res = await fetch(url, {
+      headers: { Authorization: accessToken },
+      method: "DELETE",
+    });
+    return res.ok;
+  },
+};
+
 export const API = {
   TextAPI,
   UserAPI,
+  EbooksAPI,
 };

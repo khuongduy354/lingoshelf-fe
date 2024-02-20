@@ -4,6 +4,7 @@ import { API } from "./API";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../App";
 import { Button } from "antd/es/radio";
+import { FileUploadComponent } from "./FileUpload";
 
 const gridStyle = {
   width: "25%",
@@ -40,10 +41,35 @@ const TextCreation = ({ setShowTextCreation, fetchMyBooks }) => {
     </div>
   );
 };
+const FileUploadPanel = ({ setShowFileUpload, fetchMyBooks }) => {
+  const { idTok } = useContext(AppContext);
 
+  const uploadFile = async (files) => {
+    const formdata = new FormData();
+    [...files].forEach((file, idx) =>
+      formdata.append("books", file, file.name)
+    );
+    const isOk = await API.EbooksAPI.uploadBooks(idTok, formdata);
+    if (isOk) {
+      alert("File uploaded!");
+      fetchMyBooks();
+    } else {
+      alert("File not uploaded!");
+    }
+  };
+  return (
+    <div>
+      <FileUploadComponent cb={uploadFile} />
+      <p>Allow extensions: pdf, epub, mobi, doc, docx, txt</p>
+      <Button onClick={() => setShowFileUpload(false)}>Close</Button>
+    </div>
+  );
+};
 export const MyBooks = () => {
   const [showTextCreation, setShowTextCreation] = useState(false);
   const [books, setBooks] = useState([]);
+  const [showFileUpload, setShowFileUpload] = useState(false);
+
   const { idTok } = useContext(AppContext);
   async function fetchMyBooks() {
     const textFiles = await API.TextAPI.getMyTexts(idTok);
@@ -52,6 +78,16 @@ export const MyBooks = () => {
     } else {
       alert("No text files found!");
     }
+
+    const ebooks = await API.EbooksAPI.getMyBooks(idTok);
+    if (ebooks) {
+      setBooks((prev) => [
+        ...prev,
+        ...ebooks.map((ebook) => ({ ...ebook, isText: false })),
+      ]);
+    } else {
+      alert("No ebooks found!");
+    }
   }
   useEffect(() => {
     if (idTok) fetchMyBooks();
@@ -59,12 +95,19 @@ export const MyBooks = () => {
 
   return (
     <div>
+      <Button onClick={() => setShowFileUpload(true)}>Upload File</Button>
       <Button onClick={() => setShowTextCreation(true)}>
         Create Text File
       </Button>
       {showTextCreation && (
         <TextCreation
           setShowTextCreation={setShowTextCreation}
+          fetchMyBooks={fetchMyBooks}
+        />
+      )}
+      {showFileUpload && (
+        <FileUploadPanel
+          setShowFileUpload={setShowFileUpload}
           fetchMyBooks={fetchMyBooks}
         />
       )}
