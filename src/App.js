@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { createContext, useState } from "react";
 import { Login } from "./components/Login";
-
-function App() {
+import { MyBooks } from "./components/MyBooks";
+function Demo() {
   const [definitions, setDefinitions] = useState([]);
   const handleMouseUp = async () => {
     let text = window.getSelection().toString();
@@ -45,6 +45,23 @@ function App() {
         {text}
       </div>
     </div>
+  );
+}
+export const AppContext = createContext({
+  idTok: null,
+  setPage: () => {},
+  setIdTok: () => {},
+});
+function App() {
+  const [page, setPage] = useState("login");
+  const [idTok, setIdTok] = useState(null);
+  return (
+    <AppContext.Provider value={{ idTok, setPage, setIdTok }}>
+      <div>
+        {page === "login" && <Login />}
+        {page === "mybooks" && <MyBooks />}
+      </div>
+    </AppContext.Provider>
   );
 }
 
