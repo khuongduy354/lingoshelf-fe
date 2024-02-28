@@ -5,6 +5,8 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../App";
 import { Button } from "antd/es/radio";
 import { FileUploadComponent } from "./FileUpload";
+import { EpubReader } from "./EpubReader";
+import { filterDupId } from "./filterDupId";
 
 const gridStyle = {
   width: "25%",
@@ -81,10 +83,12 @@ export const MyBooks = () => {
 
     const ebooks = await API.EbooksAPI.getMyBooks(idTok);
     if (ebooks) {
-      setBooks((prev) => [
-        ...prev,
-        ...ebooks.map((ebook) => ({ ...ebook, isText: false })),
-      ]);
+      setBooks((prev) =>
+        filterDupId([
+          ...prev,
+          ...ebooks.map((ebook) => ({ ...ebook, isText: false })),
+        ])
+      );
     } else {
       alert("No ebooks found!");
     }

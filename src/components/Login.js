@@ -31,7 +31,7 @@ export const Login = () => {
       }
     }
     firebaseAuth.onAuthStateChanged((user) => {
-      initLogin();
+      if (user) initLogin();
     });
   }, []);
   const signInGoogle = () => {
