@@ -1,8 +1,8 @@
-import kanji_en_bank1 from "../../public/dictionary/kanji_en/kanji_bank_1.json";
-import kanji_en_bank2 from "../../public/dictionary/kanji_en/kanji_bank_2.json";
-import kanji_vn_bank1 from "../../public/dictionary/kanji_vn/kanji_bank_1.json";
-import kanji_vn_bank2 from "../../public/dictionary/kanji_vn/kanji_bank_2.json";
-import { en_vn_text } from "../../public/dictionary/en_*/en_vi.js";
+import kanji_en_bank1 from "../dictionary/kanji_en/kanji_bank_1.json";
+import kanji_en_bank2 from "../dictionary/kanji_en/kanji_bank_2.json";
+import kanji_vn_bank1 from "../dictionary/kanji_vn/kanji_bank_1.json";
+import kanji_vn_bank2 from "../dictionary/kanji_vn/kanji_bank_2.json";
+import { en_vn_text } from "../dictionary/en_*/en_vi.js";
 // import { en_en_text } from "../../public/dictionary/en_*/en_en.js";
 
 const en_vn_bank = en_vn_text.split("\n");
@@ -53,11 +53,14 @@ const wiktionaryHelper = (() => {
 export const en2enWord = (word) => {
   const { getText, getEnDef } = wiktionaryHelper;
   const widx = en_vn_bank.findIndex((item) => getText(item) === word);
+  if (widx === -1) return null;
+
   return [getEnDef(en_vn_bank[widx])];
 };
 export const en2vnWord = (word) => {
   const { getText, getDef } = wiktionaryHelper;
   const widx = en_vn_bank.findIndex((item) => getText(item) === word);
+  if (widx === -1) return null;
 
   return [getDef(en_vn_bank[widx])];
 };
