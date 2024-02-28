@@ -7,6 +7,7 @@ import { Button } from "antd/es/radio";
 import { FileUploadComponent } from "./FileUpload";
 import { EpubReader } from "./EpubReader";
 import { filterDupId } from "./filterDupId";
+import { BookRenderer } from "./BookRenderer";
 
 const gridStyle = {
   width: "25%",
@@ -68,6 +69,7 @@ const FileUploadPanel = ({ setShowFileUpload, fetchMyBooks }) => {
   );
 };
 export const MyBooks = () => {
+  const [activeBook, setActiveBook] = useState(null);
   const [showTextCreation, setShowTextCreation] = useState(false);
   const [books, setBooks] = useState([]);
   const [showFileUpload, setShowFileUpload] = useState(false);
@@ -89,6 +91,7 @@ export const MyBooks = () => {
           ...ebooks.map((ebook) => ({ ...ebook, isText: false })),
         ])
       );
+      console.log(books);
     } else {
       alert("No ebooks found!");
     }
@@ -116,13 +119,22 @@ export const MyBooks = () => {
         />
       )}
 
-      <Card title="Card Title">
-        {books.map((book, idx) => (
-          <Card.Grid style={gridStyle} key={idx}>
-            <BookItem book={book} fetchMyBooks={fetchMyBooks} />
-          </Card.Grid>
-        ))}
-      </Card>
+      {activeBook && (
+        <BookRenderer book={activeBook} setActiveBook={setActiveBook} />
+      )}
+      {!activeBook && (
+        <Card title="Card Title">
+          {books.map((book, idx) => (
+            <Card.Grid style={gridStyle} key={idx}>
+              <BookItem
+                book={book}
+                fetchMyBooks={fetchMyBooks}
+                setActiveBook={setActiveBook}
+              />
+            </Card.Grid>
+          ))}
+        </Card>
+      )}
     </div>
   );
 };
