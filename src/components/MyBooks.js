@@ -91,7 +91,6 @@ export const MyBooks = () => {
           ...ebooks.map((ebook) => ({ ...ebook, isText: false })),
         ])
       );
-      console.log(books);
     } else {
       alert("No ebooks found!");
     }

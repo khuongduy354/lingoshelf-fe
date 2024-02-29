@@ -6,15 +6,19 @@ import { TranslationToolTip } from "./TranslationToolTip";
 
 const { Title, Paragraph, Text, Link } = Typography;
 
-const EbookRenderer = ({ ebook, handleMouseUp }) => {
+const EbookRenderer = ({ book, handleMouseUp }) => {
   return (
     <div onMouseUp={handleMouseUp}>
-      {ebook.url.split(".").pop() === "epub" && (
+      {book.url.split(".").pop() === "epub" ? (
         <div>
-          <Divider>{ebook.title}</Divider>
-          <EpubReader url={ebook.url} initLocation={ebook.currLocation} />
+          <Divider>{book.title}</Divider>
+          <EpubReader
+            bookId={book.id}
+            url={book.url}
+            initLocation={book.currLocation}
+          />
         </div>
-      )}
+      ) : null}
     </div>
   );
 };
@@ -60,7 +64,7 @@ export const BookRenderer = ({ book, setActiveBook }) => {
         <TextRenderer text={book} handleMouseUp={handleMouseUp} />
       )}
       {!book.isText && (
-        <EbookRenderer ebook={book} handleMouseUp={handleMouseUp} />
+        <EbookRenderer book={book} handleMouseUp={handleMouseUp} />
       )}
     </div>
   );

@@ -105,6 +105,15 @@ const EbooksAPI = {
     });
     return res.ok;
   },
+  // updateProgress: async (accessToken, currLocation, bookId) => {
+  //   const url = process.env.REACT_APP_BE_URL + "/books/" + bookId + "/progress";
+  //   const res = await fetch(url, {
+  //     headers: { Authorization: accessToken },
+  //     method: "PATCH",
+  //     body: JSON.stringify({ currLocation }),
+  //   });
+  //   return res.ok;
+  // },
 };
 
 export const API = {
